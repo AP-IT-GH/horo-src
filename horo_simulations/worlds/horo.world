@@ -54,10 +54,14 @@
 
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>0.9 0.8 6 0 1.5708 0</pose>
+        <pose>0.9 0.8 4 0 1.5708 0</pose>
         <!--view_controller>orbit</view_controller-->
       </camera>
     </gui>
+
+    <scene>
+      <shadows>false</shadows>
+    </scene>
 
   </world>
 </sdf>
