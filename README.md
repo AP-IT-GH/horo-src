@@ -48,7 +48,7 @@ $ echo $ROS_PACKAGE_PATH
 
 ## Install the Turtlebot3 ROS packages
 
-Follow [this](https://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#pc-setup) guide to install the Turtlebot3 ROS packages.
+Follow [this](https://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#install-dependent-ros-1-packages) guide to install the Turtlebot3 ROS packages.
 
 ## Running the simulation
 
