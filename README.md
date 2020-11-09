@@ -46,6 +46,10 @@ $ echo $ROS_PACKAGE_PATH
 ```
 [More information about setting up catkin workspaces.](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 
+## Install the Turtlebot3 ROS packages
+
+Follow [this](https://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#pc-setup) guide to install the Turtlebot3 ROS packages.
+
 ## Running the simulation
 
 Run the simulation
