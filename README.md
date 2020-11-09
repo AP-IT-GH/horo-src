@@ -29,7 +29,7 @@ $ catkin_make
 ```
 > Normally a build and devel folder will be made in the workspace.
 
-Before continuing make sure to source the `devel/setup.bash` file is sourced at startup.
+Before continuing make sure the `devel/setup.bash` file is sourced at startup.
 
 ```
 $ sudo nano ~/.bashrc
