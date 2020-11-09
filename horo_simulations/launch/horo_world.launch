@@ -27,6 +27,6 @@
     <param name="turtlebot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg tb_model).urdf.xacro" />
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot_urdf"  args="-urdf -model turtlebot3_$(arg tb_model) -x $(arg tb_x) -y $(arg tb_y) -z $(arg tb_z) -param turtlebot_description" />
 
-    <param name="uarm_description" command="$(find xacro)/xacro --inorder $(find swiftpro)/urdf/pro_model.xacro" />
+    <param name="uarm_description" command="$(find xacro)/xacro --inorder $(find uarm_swiftpro_horo)/urdf/pro_model.xacro" />
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm1_urdf"  args="-urdf -model uarm1 -x $(arg uarm1_x) -y $(arg uarm1_y) -z $(arg uarm1_z) -param uarm_description" />
 </launch>
