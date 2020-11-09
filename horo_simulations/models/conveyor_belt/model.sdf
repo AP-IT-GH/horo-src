@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<sdf version="1.5">
+    <model name="conveyor_belt">
+        <static>true</static>
+        <link name="link">
+            <collision name="collision">
+                <geometry>
+                    <box>
+                        <size>0.133 0.66 0.1</size>
+                    </box>
+                </geometry>
+            </collision>
+            <visual name="visual">
+                <cast_shadows>true</cast_shadows>
+                <geometry>
+                    <box>
+                        <size>0.133 0.66 0.1</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Black</name>
+                    </script>
+                </material>
+            </visual>
+        </link>
+    </model>
+</sdf>

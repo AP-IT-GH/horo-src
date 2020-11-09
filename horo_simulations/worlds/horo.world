@@ -31,6 +31,12 @@
       <pose>1.625 0.90 0.15 0 0 1.5708</pose>
     </include>
 
+    <!-- Conveyor belt -->
+    <include>
+      <uri>model://conveyor_belt</uri>
+      <pose>1.35 0.75 0 0 0 0</pose>
+    </include>
+
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>

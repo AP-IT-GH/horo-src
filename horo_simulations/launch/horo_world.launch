@@ -4,15 +4,17 @@
     <!-- Launch arguments -->
     <arg name="debug" default="false"/>
     <arg name="gui" default="true"/>
-    <arg name="pause" default="false"/>
+    <arg name="pause" default="true"/>
     <arg name="world" default="$(find horo_simulations)/worlds/horo.world"/>
     <arg name="tb_model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
     <arg name="tb_x" default="1.4"/>
     <arg name="tb_y" default="1.4"/>
     <arg name="tb_z" default="0"/>
-    <arg name="uarm1_x" default="0.4"/>
-    <arg name="uarm1_y" default="0.2"/>
+    <arg name="uarm1_x" default="1.5"/>
+    <arg name="uarm1_y" default="1"/>
     <arg name="uarm1_z" default="0"/>
+    <arg name="uarm2_y" default="0.5"/>
+    <arg name="uarm_yaw" default="3.1416"/>
     
     <!-- Include gazebo_ros launcher -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -28,5 +30,6 @@
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot_urdf"  args="-urdf -model turtlebot3_$(arg tb_model) -x $(arg tb_x) -y $(arg tb_y) -z $(arg tb_z) -param turtlebot_description" />
 
     <param name="uarm_description" command="$(find xacro)/xacro --inorder $(find uarm_swiftpro_horo)/urdf/pro_model.xacro" />
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm1_urdf"  args="-urdf -model uarm1 -x $(arg uarm1_x) -y $(arg uarm1_y) -z $(arg uarm1_z) -param uarm_description" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm1_urdf"  args="-urdf -model uarm1 -x $(arg uarm1_x) -y $(arg uarm1_y) -z $(arg uarm1_z) -Y $(arg uarm_yaw) -param uarm_description" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm2_urdf"  args="-urdf -model uarm2 -x $(arg uarm1_x) -y $(arg uarm2_y) -z $(arg uarm1_z) -Y $(arg uarm_yaw) -param uarm_description" />
 </launch>
