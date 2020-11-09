@@ -37,6 +37,12 @@
       <pose>1.35 0.75 0 0 0 0</pose>
     </include>
 
+    <!-- Obstacle -->
+    <include>
+      <uri>model://obstacle</uri>
+      <pose>1 0.9250 0.15 0 0 0</pose>
+    </include>
+
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
