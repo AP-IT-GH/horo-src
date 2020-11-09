@@ -18,7 +18,7 @@ $ git clone https://github.com/AP-Elektronica-ICT/horo-src.git
 Change the repo folder name to "src".
 
 ```
-mv horo-src src
+$ mv horo-src src
 ```
 
 Build the workspace.
