@@ -50,6 +50,18 @@ $ echo $ROS_PACKAGE_PATH
 
 Follow [this](https://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#install-dependent-ros-1-packages) guide to install the Turtlebot3 ROS packages.
 
+Add this to the .bashrc file
+
+```
+$ export TURTLEBOT3_MODEL=waffle_pi
+```
+
+And source setup file
+```
+$ roscd
+$ source devel/setup.bash
+```
+
 ## Running the simulation
 
 Run the simulation
