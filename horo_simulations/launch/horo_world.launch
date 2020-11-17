@@ -6,30 +6,69 @@
     <arg name="gui" default="true"/>
     <arg name="pause" default="true"/>
     <arg name="world" default="$(find horo_simulations)/worlds/horo.world"/>
+    
+    <!-- TurtleBot -->
     <arg name="tb_model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
     <arg name="tb_x" default="1.4"/>
     <arg name="tb_y" default="1.4"/>
     <arg name="tb_z" default="0"/>
-    <arg name="uarm1_x" default="1.5"/>
-    <arg name="uarm1_y" default="1"/>
-    <arg name="uarm1_z" default="0"/>
-    <arg name="uarm2_y" default="0.5"/>
-    <arg name="uarm_yaw" default="3.1416"/>
     
     <!-- Include gazebo_ros launcher -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(arg world)"/>
+        <arg name="verbose" value="true" />
         <arg name="debug" value="$(arg debug)"/>
         <arg name="gui" value="$(arg gui)"/>
         <arg name="paused" value="$(arg pause)"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="headless" value="false"/>
     </include>
-
+    
+    <!-- Include TurtleBot-->
     <param name="turtlebot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg tb_model).urdf.xacro" />
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot_urdf"  args="-urdf -model turtlebot3_$(arg tb_model) -x $(arg tb_x) -y $(arg tb_y) -z $(arg tb_z) -param turtlebot_description" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot_urdf"  
+        args="-urdf -model turtlebot3_$(arg tb_model) 
+        -x $(arg tb_x) 
+        -y $(arg tb_y) 
+        -z $(arg tb_z) 
+        -param turtlebot_description" />
 
-    <param name="uarm_description" command="$(find xacro)/xacro --inorder $(find uarm_swiftpro_horo)/urdf/pro_model.xacro" />
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm1_urdf"  args="-urdf -model uarm1 -x $(arg uarm1_x) -y $(arg uarm1_y) -z $(arg uarm1_z) -Y $(arg uarm_yaw) -param uarm_description" />
-    <node pkg="gazebo_ros" type="spawn_model" name="spawn_uarm2_urdf"  args="-urdf -model uarm2 -x $(arg uarm1_x) -y $(arg uarm2_y) -z $(arg uarm1_z) -Y $(arg uarm_yaw) -param uarm_description" />
+
+<!-- uArms -->
+    <param name="swiftpro1_description"
+        command="$(find xacro)/xacro --inorder '$(find horo_simulations)/urdf/swiftpro1/swiftpro1.xacro'" />
+
+    <param name="swiftpro2_description"
+        command="$(find xacro)/xacro --inorder '$(find horo_simulations)/urdf/swiftpro2/swiftpro2.xacro'" />
+
+    <!-- Robot pose -->
+    <arg name="sp_x" default="1.5"/>
+    <arg name="sp1_y" default="1"/>
+    <arg name="sp2_y" default="0.5"/>
+    <arg name="sp_z" default="0"/>
+    <arg name="sp_roll" default="0"/>
+    <arg name="sp_pitch" default="0"/>
+    <arg name="sp_yaw" default="3.1416"/>
+
+    <!-- Spawn My Robots-->
+    <node name="spawn_swiftpro1_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+                args="-urdf -param swiftpro1_description -model swiftpro3
+                    -x $(arg sp_x)
+                    -y $(arg sp1_y)
+                    -z $(arg sp_z)
+                    -R $(arg sp_roll)
+                    -P $(arg sp_pitch)
+                    -Y $(arg sp_yaw)"/>
+
+    <node name="spawn_swiftpro2_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+            args="-urdf -param swiftpro2_description -model swiftpro2
+                -x $(arg sp_x)
+                -y $(arg sp2_y)
+                -z $(arg sp_z)
+                -R $(arg sp_roll)
+                -P $(arg sp_pitch)
+                -Y $(arg sp_yaw)"/>
+
+   
+
 </launch>
