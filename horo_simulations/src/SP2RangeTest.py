@@ -47,62 +47,66 @@ maxLeft_coords.z = 140
 delay = 0.5 # half a second
 rate = rospy.Rate(10) # 10hz
 
-for x in range(3):
-    pub_position.publish(home_coords)
-    rate.sleep()
+def MoveSP2():
+    for x in range(3):
+        pub_position.publish(home_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(belt_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(belt_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(coords1)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(coords1)
+        rate.sleep()
 
-for x in range(3):
-    pub_position.publish(block_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(block_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-pump_value = 1
-pub_pump.publish(pump_value)
+    pump_value = 1
+    pub_pump.publish(pump_value)
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(coords2)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(coords2)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(maxFront_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(maxFront_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(maxLeft_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(maxLeft_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-for x in range(3):
-    pub_position.publish(maxFront_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(maxFront_coords)
+        rate.sleep()
 
-rospy.sleep(delay)
+    rospy.sleep(delay)
 
-pump_value = 0
-pub_pump.publish(pump_value)
+    pump_value = 0
+    pub_pump.publish(pump_value)
 
-rospy.sleep(delay*2)
+    rospy.sleep(delay*2)
 
-for x in range(3):
-    pub_position.publish(home_coords)
-    rate.sleep()
+    for x in range(3):
+        pub_position.publish(home_coords)
+        rate.sleep()
+
+if __name__ == '__main__':
+    MoveSP2()
