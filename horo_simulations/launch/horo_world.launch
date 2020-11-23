@@ -35,13 +35,27 @@
 
 
 <!-- uArms -->
-    <param name="swiftpro1_description"
-        command="$(find xacro)/xacro --inorder '$(find horo_simulations)/urdf/swiftpro1/swiftpro1.xacro'" />
+    
+    <!--Load urdf to param server-->
+    <param name="robot_description"
+        command="$(find xacro)/xacro --inorder '$(find swiftpro_description)/urdf/swiftpro1/swiftpro1.xacro'"/>
 
-    <param name="swiftpro2_description"
-        command="$(find xacro)/xacro --inorder '$(find horo_simulations)/urdf/swiftpro2/swiftpro2.xacro'" />
+    <param name="robot2_description"
+        command="$(find xacro)/xacro --inorder '$(find swiftpro_description)/urdf/swiftpro2/swiftpro2.xacro'"/>
 
-    <!-- Robot pose -->
+    <!--GUI used to send fake joint values-->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="false"/>
+    </node>
+
+    <!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/> -->
+
+    <!--Publish robot state to TF-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+        <remap from="/joint_states" to="/swiftpro/joint_states" />
+    </node>
+
+  <!-- Robot pose -->
     <arg name="sp_x" default="1.5"/>
     <arg name="sp1_y" default="1"/>
     <arg name="sp2_y" default="0.5"/>
@@ -50,25 +64,31 @@
     <arg name="sp_pitch" default="0"/>
     <arg name="sp_yaw" default="3.1416"/>
 
-    <!-- Spawn My Robots-->
-    <node name="spawn_swiftpro1_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
-                args="-urdf -param swiftpro1_description -model swiftpro3
-                    -x $(arg sp_x)
-                    -y $(arg sp1_y)
-                    -z $(arg sp_z)
-                    -R $(arg sp_roll)
-                    -P $(arg sp_pitch)
-                    -Y $(arg sp_yaw)"/>
+  <!-- Spawn uArm 1-->
+  <node name="urdf_spawner1" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+        args="
+            -urdf 
+            -param robot_description 
+            -model swiftpro1
+            -x $(arg sp_x) 
+            -y $(arg sp1_y) 
+            -z $(arg sp_z)
+            -R $(arg sp_roll) 
+            -P $(arg sp_pitch) 
+            -Y $(arg sp_yaw)
+    "/>
 
-    <node name="spawn_swiftpro2_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
-            args="-urdf -param swiftpro2_description -model swiftpro2
-                -x $(arg sp_x)
-                -y $(arg sp2_y)
-                -z $(arg sp_z)
-                -R $(arg sp_roll)
-                -P $(arg sp_pitch)
-                -Y $(arg sp_yaw)"/>
-
-   
-
+  <!-- Spawn uArm 2-->
+  <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+        args="
+            -urdf 
+            -param robot2_description 
+            -model swiftpro2
+            -x $(arg sp_x) 
+            -y $(arg sp2_y) 
+            -z $(arg sp_z)
+            -R $(arg sp_roll) 
+            -P $(arg sp_pitch) 
+            -Y $(arg sp_yaw)
+    "/>
 </launch>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot name="swiftpro" xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:include filename="$(find horo_simulations)/urdf/swiftpro.gazebo" />
-<xacro:include filename="$(find horo_simulations)/urdf/swiftpro_joints.xml" />
-<xacro:include filename="$(find horo_simulations)/urdf/swiftpro_trans.xml" />
+<xacro:include filename="$(find swiftpro_description)/urdf/swiftpro.gazebo" />
+<xacro:include filename="$(find swiftpro_description)/urdf/swiftpro_joints.xml" />
+<xacro:include filename="$(find swiftpro_description)/urdf/swiftpro_trans.xml" />
 
   <!-- Used for fixing robot to Gazebo 'base_link' -->
   <link name="world"/>
