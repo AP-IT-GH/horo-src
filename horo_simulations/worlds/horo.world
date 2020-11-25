@@ -36,6 +36,11 @@
       <uri>model://conveyor_belt</uri>
       <pose>1.35 0.75 0 0 0 0</pose>
     </include>
+    <!-- Wall in front of conveyor belt -->
+    <include>
+      <uri>model://wall_conveyor</uri>
+      <pose>1.15 0.75 0 0 0 0</pose>
+    </include>
 
     <!-- Obstacle -->
     <include>
