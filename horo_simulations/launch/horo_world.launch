@@ -4,19 +4,22 @@
     <!-- Launch arguments -->
     <arg name="debug" default="false"/>
     <arg name="gui" default="true"/>
-    <arg name="pause" default="true"/>
+    <arg name="pause" default="false"/>
     <arg name="world" default="$(find horo_simulations)/worlds/horo.world"/>
     
     <!-- TurtleBot -->
     <arg name="tb_model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
-    <arg name="tb_x" default="1.4"/>
-    <arg name="tb_y" default="1.4"/>
+    <arg name="tb_x" default="1.3"/>
+    <arg name="tb_y" default="0.2"/>
     <arg name="tb_z" default="0"/>
+    <arg name="tb_roll" default="0"/>
+    <arg name="tb_pitch" default="0"/>
+    <arg name="tb_yaw" default="3.1416"/>
     
     <!-- Include gazebo_ros launcher -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(arg world)"/>
-        <arg name="verbose" value="true" />
+        <arg name="verbose" value="false" />
         <arg name="debug" value="$(arg debug)"/>
         <arg name="gui" value="$(arg gui)"/>
         <arg name="paused" value="$(arg pause)"/>
@@ -25,16 +28,20 @@
     </include>
     
     <!-- Include TurtleBot-->
-    <param name="turtlebot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg tb_model).urdf.xacro" />
+    <param name="turtlebot3_description"
+        command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg tb_model).urdf.xacro" />
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot_urdf"  
         args="-urdf -model turtlebot3_$(arg tb_model) 
         -x $(arg tb_x) 
         -y $(arg tb_y) 
         -z $(arg tb_z) 
-        -param turtlebot_description" />
+        -R $(arg tb_roll) 
+        -P $(arg tb_pitch) 
+        -Y $(arg tb_yaw)
+        -param turtlebot3_description" />
 
 
-<!-- uArms -->
+    <!-- uArms -->
     
     <!--Load urdf to param server-->
     <param name="robot_description"
@@ -55,7 +62,7 @@
         <remap from="/joint_states" to="/swiftpro/joint_states" />
     </node>
 
-  <!-- Robot pose -->
+    <!-- Robot pose -->
     <arg name="sp_x" default="1.5"/>
     <arg name="sp1_y" default="1"/>
     <arg name="sp2_y" default="0.5"/>
@@ -65,7 +72,7 @@
     <arg name="sp_yaw" default="3.1416"/>
 
   <!-- Spawn uArm 1-->
-  <node name="urdf_spawner1" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+  <node name="spawn_swiftpro1_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
         args="
             -urdf 
             -param robot_description 
@@ -79,7 +86,7 @@
     "/>
 
   <!-- Spawn uArm 2-->
-  <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+  <node name="spawn_swiftpro2_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
         args="
             -urdf 
             -param robot2_description 
