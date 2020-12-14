@@ -227,11 +227,11 @@ tempBlockReady = 0
 tempBlockStock = 0
 
 #realsense coordinates
-rs_x
-rs_y
+rs_x = 0
+rs_y = 0
 
 #WafflePi
-wafflePi_status
+wafflePi_status = 0
 
 
 def BlockReady_callback(dataIn):
@@ -255,6 +255,7 @@ def RS_coordinates_callback(dataIn):
 def PiGoalState_callback(dataIn):
     global wafflePi_status
     wafflePi_status = dataIn.status
+    rospy.loginfo(wafflePi_status)
 
 def Check():
     global tempBlockReady
@@ -266,16 +267,16 @@ def Check():
         while tempBlockReady == 0:
             time.sleep(1)                               # waits until block arrives at color sensor
 
-    if (tempBlockReady == 1 && wafflePi_status == 3):                           # if block is ready
+    if (tempBlockReady == 1 and wafflePi_status == 3):                           # if block is ready
         Belt(0)                                         # turn of belt
         #SetDestinationCoords()
         ## DEBUG:
         output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
-        rospy.loginfo(output)
+        #rospy.loginfo(output)
         ##
-        MoveSP2()                                       # and execute SP2
+        #MoveSP2()                                       # and execute SP2
 
-rospy.init_node('automation')
+rospy.init_node('automationV2')
 rospy.Subscriber("block_ready",UInt16,BlockReady_callback)
 rospy.Subscriber("block_stock",UInt16,BlockStock_callback)
 pub_belt = rospy.Publisher("belt_state",UInt16,queue_size=1)

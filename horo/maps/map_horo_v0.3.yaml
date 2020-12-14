@@ -1,4 +1,4 @@
-image: /home/ros1604/map_horo_v0.3.pgm
+image: map_horo_v0.3.pgm
 resolution: 0.050000
 origin: [-10.000000, -10.000000, 0.000000]
 negate: 0
