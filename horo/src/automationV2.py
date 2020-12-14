@@ -266,8 +266,13 @@ def Check():
         while tempBlockReady == 0:
             time.sleep(1)                               # waits until block arrives at color sensor
 
-    if (tempBlockReady == 1):                           # if block is ready
+    if (tempBlockReady == 1 && wafflePi_status == 3):                           # if block is ready
         Belt(0)                                         # turn of belt
+        #SetDestinationCoords()
+        ## DEBUG:
+        output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
+        rospy.loginfo()
+        ##
         MoveSP2()                                       # and execute SP2
 
 rospy.init_node('automation')
