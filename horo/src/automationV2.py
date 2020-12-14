@@ -271,7 +271,7 @@ def Check():
         #SetDestinationCoords()
         ## DEBUG:
         output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
-        rospy.loginfo()
+        rospy.loginfo(output)
         ##
         MoveSP2()                                       # and execute SP2
 
