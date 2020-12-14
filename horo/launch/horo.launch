@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
     <!-- Arguments -->
     <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
@@ -37,5 +38,5 @@
     </node>
 
     <!-- Execute Automation v1-->
-    <node pkg="horo_simulations" type="automationV1.py" name="automation_v1" output="screen"/>
+    <node pkg="horo" type="automationV2.py" name="automation" output="screen"/>
 </launch>
