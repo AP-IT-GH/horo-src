@@ -5,11 +5,14 @@ from std_msgs.msg import UInt16
 from swiftpro.msg import position
 from swiftpro.msg import status
 
+
 #string_msgs for realsense
 from std_msgs.msg import String
 
 #message file for goal status of WafflePi
 from actionlib_msgs.msg import GoalStatusArray
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from move_base_msgs.msg import MoveBaseActionGoal
 
 ##############################################################################################
 #SP1
@@ -254,13 +257,58 @@ def RS_coordinates_callback(dataIn):
 #WafflePi goal status callback
 def PiGoalState_callback(dataIn):
     global wafflePi_status
-    wafflePi_status = dataIn.status
-    rospy.loginfo(wafflePi_status)
+    if (dataIn.status_list):
+        #wafflePi_status = dataIn.status_list.status
+        rospy.loginfo(dataIn.status_list[0].status)
+        wafflePi_status = dataIn.status_list[0].status
+    else :
+        rospy.loginfo("lijst leeg")
+
+def SetInitialPose():
+    pub_msg = PoseWithCovarianceStamped()
+    #header
+    pub_msg.header.frame_id = "map"
+    #pose
+    pub_msg.pose.pose.position.x = -0.0563785433769
+    pub_msg.pose.pose.position.y = -0.0411755442619
+    pub_msg.pose.pose.position.z = 0.0
+
+    pub_msg.pose.pose.orientation.x = 0.0
+    pub_msg.pose.pose.orientation.y = 0.0
+    pub_msg.pose.pose.orientation.z = 0.0515177204666
+    pub_msg.pose.pose.orientation.w = 0.998672080554
+    
+    pub_msg.pose.covariance = [0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06853891945200942]
+
+    rospy.loginfo(pub_msg)
+    wafflepi_initial_pose.publish(pub_msg)
+
+def SetCurrentGoal(pos_x, pos_y, pos_z=0.0, ori_x=0.0, ori_y=0.0, ori_z=0.0, ori_w=1.0):
+    pub_msg = MoveBaseActionGoal()
+    #header
+    pub_msg.goal.target_pose.header.frame_id = "map"
+    
+    pub_msg.goal.target_pose.pose.position.x = pos_x
+    pub_msg.goal.target_pose.pose.position.y = pos_y
+    pub_msg.goal.target_pose.pose.position.z = pos_z
+
+    pub_msg.goal.target_pose.pose.orientation.x = ori_x
+    pub_msg.goal.target_pose.pose.orientation.y = ori_y
+    pub_msg.goal.target_pose.pose.orientation.z = ori_z
+    pub_msg.goal.target_pose.pose.orientation.w = ori_w
+
+
+    rospy.loginfo(pub_msg)
+    wafflepi_current_goal.publish(pub_msg)
 
 def Check():
     global tempBlockReady
     global tempBlockStock
     print("Checking: stock=" + str(tempBlockStock) + " || ready=" + str(tempBlockReady))
+    
+    if(tempBlockReady == 1):
+        Belt(0)
+    
     if (tempBlockStock == 1 and tempBlockReady == 0):   # if there's stock but no block is ready
         MoveSP1()                                       # execute SP1
         Belt(1)                                         # and turn on belt
@@ -268,18 +316,22 @@ def Check():
             time.sleep(1)                               # waits until block arrives at color sensor
 
     if (tempBlockReady == 1 and wafflePi_status == 3):                           # if block is ready
-        Belt(0)                                         # turn of belt
+                                                 # turn of belt
         #SetDestinationCoords()
         ## DEBUG:
-        output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
+        #output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
         #rospy.loginfo(output)
         ##
-        #MoveSP2()                                       # and execute SP2
+        MoveSP2()                                       # and execute SP2
 
 rospy.init_node('automationV2')
 rospy.Subscriber("block_ready",UInt16,BlockReady_callback)
 rospy.Subscriber("block_stock",UInt16,BlockStock_callback)
 pub_belt = rospy.Publisher("belt_state",UInt16,queue_size=1)
+
+#wafflePi publisher
+wafflepi_initial_pose = rospy.Publisher('initialpose',PoseWithCovarianceStamped,queue_size=1)
+wafflepi_current_goal = rospy.Publisher('move_base/goal',MoveBaseActionGoal,queue_size=1)
 
 #Realsense subscription
 rospy.Subscriber("realsense",String,RS_coordinates_callback)
@@ -288,6 +340,18 @@ rospy.Subscriber("realsense",String,RS_coordinates_callback)
 rospy.Subscriber("move_base/status",GoalStatusArray,PiGoalState_callback)
 
 rate = rospy.Rate(10) # 10hz
+
+time.sleep(2)
+
+for x in range(3):
+    SetInitialPose()
+    rospy.loginfo("set initial pose")
+
+time.sleep(2)
+
+#for x in range(3):
+    #SetCurrentGoal(1.07001495361,0.404617369175)
+    #rospy.loginfo("set current goal")
 
 while not rospy.is_shutdown():
     Check()
