@@ -190,18 +190,6 @@ def MoveSP2():
 
     rospy.sleep(delay)
 
-    for x in range(3):
-        sp2_pub_position.publish(sp2_maxLeft_coords)
-        rate.sleep()
-
-    rospy.sleep(delay)
-
-    for x in range(3):
-        sp2_pub_position.publish(sp2_maxFront_coords)
-        rate.sleep()
-
-    rospy.sleep(delay)
-
     sp2_pump_value = 0
     sp2_pub_pump.publish(sp2_pump_value)
 
@@ -269,18 +257,18 @@ def SetInitialPose():
     #header
     pub_msg.header.frame_id = "map"
     #pose
-    pub_msg.pose.pose.position.x = -0.0563785433769
-    pub_msg.pose.pose.position.y = -0.0411755442619
+    pub_msg.pose.pose.position.x = 0.615000069141
+    pub_msg.pose.pose.position.y = 0.809999883175
     pub_msg.pose.pose.position.z = 0.0
 
     pub_msg.pose.pose.orientation.x = 0.0
     pub_msg.pose.pose.orientation.y = 0.0
-    pub_msg.pose.pose.orientation.z = 0.0515177204666
-    pub_msg.pose.pose.orientation.w = 0.998672080554
+    pub_msg.pose.pose.orientation.z = 0.0383764231553
+    pub_msg.pose.pose.orientation.w = 0.999263353749
     
     pub_msg.pose.covariance = [0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06853891945200942]
 
-    rospy.loginfo(pub_msg)
+    #rospy.loginfo(pub_msg)
     wafflepi_initial_pose.publish(pub_msg)
 
 def SetCurrentGoal(pos_x, pos_y, pos_z=0.0, ori_x=0.0, ori_y=0.0, ori_z=0.0, ori_w=1.0):
@@ -298,7 +286,7 @@ def SetCurrentGoal(pos_x, pos_y, pos_z=0.0, ori_x=0.0, ori_y=0.0, ori_z=0.0, ori
     pub_msg.goal.target_pose.pose.orientation.w = ori_w
 
 
-    rospy.loginfo(pub_msg)
+    #rospy.loginfo(pub_msg)
     wafflepi_current_goal.publish(pub_msg)
 
 def Check():
@@ -322,7 +310,10 @@ def Check():
         #output = "x coord="+str(rs_x)+" || y coord="+str(rs_y)
         #rospy.loginfo(output)
         ##
+        Belt(0)
         MoveSP2()                                       # and execute SP2
+        SetCurrentGoal(0.90,1.40)   # go back to home position
+        #rospy.loginfo("arm logic")
 
 rospy.init_node('automationV2')
 rospy.Subscriber("block_ready",UInt16,BlockReady_callback)
@@ -350,8 +341,15 @@ for x in range(3):
 time.sleep(2)
 
 #for x in range(3):
-    #SetCurrentGoal(1.07001495361,0.404617369175)
-    #rospy.loginfo("set current goal")
+#    rospy.loginfo("first position")
+#    SetCurrentGoal(0.666,1.69)
+
+#time.sleep(10)
+
+for x in range(3):
+    rospy.loginfo("second position")
+    SetCurrentGoal(1.45,1.735)
+
 
 while not rospy.is_shutdown():
     Check()
