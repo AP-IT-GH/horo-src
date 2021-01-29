@@ -2,6 +2,7 @@
 import rospy
 import time
 from std_msgs.msg import UInt16
+from std_msgs.msg import String
 from swiftpro.msg import position
 from swiftpro.msg import status
 
@@ -48,6 +49,12 @@ sp1_belt_coords.z = 65
 sp2_pub_position = rospy.Publisher('/sp2_position_write_topic',position,queue_size=1)
 sp2_pub_pump = rospy.Publisher('/sp2_pump_topic',status,queue_size=1)
 
+
+
+def Map(x,in_min,in_max,out_min,out_max):
+    return (float(x) - in_min) * (out_max - out_min) / (in_max -in_min) + out_min
+    
+
 sp2_coords1 = position()
 sp2_coords2 = position()
 sp2_block_coords = position()
@@ -79,6 +86,9 @@ sp2_maxFront_coords.z = 155
 sp2_maxLeft_coords.x = 8
 sp2_maxLeft_coords.y = 314
 sp2_maxLeft_coords.z = 140
+
+
+
 
 ##############################################################################################
 #SP1 & SP2
@@ -185,6 +195,11 @@ def MoveSP2():
     rospy.sleep(delay)
 
     for x in range(3):
+        sp2_maxFront_coords.x = float(rs_x)
+        sp2_maxFront_coords.y = float(rs_y)
+        sp2_maxFront_coords.z = 128
+        rospy.loginfo("arm x:"+str(rs_x))
+        rospy.loginfo("arm y:"+str(rs_y))
         sp2_pub_position.publish(sp2_maxFront_coords)
         rate.sleep()
 
@@ -233,12 +248,35 @@ def BlockStock_callback(dataIn):
     global tempBlockStock
     tempBlockStock = dataIn.data
 
+def realsense_callback(dataIn):
+    ##Camera
+    #lV:225,195
+    #rv:299,195
+    #la:225,235
+    #ra:299,235
+    ##arm
+    #lV:292,  75,128
+    #rv:292,-105,128
+    #la:260,  75,128
+    #ra:260,-105,128
+       
+    global rs_x
+    global rs_y
+    output = dataIn.data.split(";")
+    rospy.loginfo("cam x:"+str(output[0]))
+    rospy.loginfo("cam y:"+str(output[1]))
+    if [output[0]<299] and [output[0]>225] and [output[1]<235] and [output[1]>195]:
+        rs_x = Map(output[0],225,299,260,292)
+        rs_y = Map(output[1],189,223,-105,75)
+
+
+
 #Realsense coordinates callback
 def RS_coordinates_callback(dataIn):
     global rs_x
     global rs_y
 
-    coord = dataIn.data.split(',')
+    coord = dataIn.data.split(';')
     rs_x = coord[0]
     rs_y = coord[1]
 
@@ -318,6 +356,7 @@ def Check():
 rospy.init_node('automationV2')
 rospy.Subscriber("block_ready",UInt16,BlockReady_callback)
 rospy.Subscriber("block_stock",UInt16,BlockStock_callback)
+rospy.Subscriber("realsense",String,realsense_callback)
 pub_belt = rospy.Publisher("belt_state",UInt16,queue_size=1)
 
 #wafflePi publisher
@@ -348,7 +387,7 @@ time.sleep(2)
 
 for x in range(3):
     rospy.loginfo("second position")
-    SetCurrentGoal(1.45,1.735)
+    SetCurrentGoal(1.45,1.72)
 
 
 while not rospy.is_shutdown():
